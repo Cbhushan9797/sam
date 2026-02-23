@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+pandas
+openpyxl
+xlrd==1.2.0
+pyxlsb
+streamlit
+requests
+llama-index
+fastmcp
+python-multipart
+python-dotenv
+llama-index-llms-ollama
+llama-index-embeddings-ollama
