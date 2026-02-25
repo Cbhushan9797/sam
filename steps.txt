@@ -1,0 +1,9 @@
+1. Open Application. Go to http://azdtlabs.southindia.cloudapp.azure.com:6200/#/showsfullapp
+2. Enter Username and Password from the data file.
+3. Click on login button.
+4. Click on Explorer -> wait 10s -> select Home Folder -> click on miscCollapseTree of home folder.
+5. Click on MM.
+6. Create New Part: Click ellipsis -> New -> Add type part -> select Part.
+7. Enter partname in 'Name' field and a description of the part in Description field from the data file.
+8. Take a snapshot to find the 'Add' button at the bottom of the opened panel and click on it.
+9. Close the browser.

@@ -8,13 +8,13 @@ DOWNLOAD_URL = f"{BACKEND_BASE_URL}/download"
 EXECUTE_URL = f"{BACKEND_BASE_URL}/api/execute"
 EXECUTE_UPLOADED_URL = f"{BACKEND_BASE_URL}/api/execute-uploaded"
 
-def stream_chat(files: dict):
+def stream_chat(data: dict, files: dict):
     """
     Yields:
       - the initial Response object once
       - each line from the backend as raw bytes
     """
-    res = requests.post(BASE_URL, files=files, stream=True, timeout=(10, 600))
+    res = requests.post(BASE_URL, data=data, files=files, stream=True, timeout=(15, 3600))
     yield res
 
     if res.status_code == 200:

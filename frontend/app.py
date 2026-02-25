@@ -44,42 +44,36 @@ with tab1:
     col_u_left, col_u_right = st.columns([1, 1])
 
     with col_u_left:
-        steps_file = st.file_uploader("Upload Manual steps Excel (required)", type=["xls", "xlsx", "xlsb"], key="steps_file")
+        steps_file = st.file_uploader("Upload Manual steps (.txt or Excel)", type=["txt", "xls", "xlsx", "xlsb"], key="steps_file")
         if steps_file:
-            try:
-                steps_bytes = steps_file.getvalue()
-                if isinstance(steps_bytes, str):
-                    steps_bytes = steps_bytes.encode("utf-8")
-
-                df = load_excel_dataframe_safe(steps_file.name, steps_bytes)
-                df = make_arrow_compatible(df)
-                st.dataframe(df.head(10), width="stretch")
-            except Exception as e:
-                import traceback
-                st.error(f"Error reading manual steps Excel: {e}")
-                st.code(traceback.format_exc())
+            if steps_file.name.endswith(".txt"):
+                st.text_area("Steps Preview:", value=steps_file.getvalue().decode("utf-8"), height=150, disabled=True)
+            else:
+                try:
+                    df = load_excel_dataframe_safe(steps_file.name, steps_file.getvalue())
+                    df = make_arrow_compatible(df)
+                    st.dataframe(df.head(10), width="stretch")
+                except Exception as e:
+                    st.error(f"Error reading steps: {e}")
 
     with col_u_right:
-        data_file = st.file_uploader("Upload Test data Excel (optional)", type=["xls", "xlsx", "xlsb"], key="data_file")
+        data_file = st.file_uploader("Upload Test data (.txt or Excel)", type=["txt", "xls", "xlsx", "xlsb"], key="data_file")
         if data_file:
-            try:
-                data_bytes = data_file.getvalue()
-                if isinstance(data_bytes, str):
-                    data_bytes = data_bytes.encode("utf-8")
-
-                df2 = load_excel_dataframe_safe(data_file.name, data_bytes)
-                df2 = make_arrow_compatible(df2)
-                st.dataframe(df2.head(10), width="stretch")
-            except Exception as e:
-                import traceback
-                st.error(f"Error reading test data Excel: {e}")
-                st.code(traceback.format_exc())
+            if data_file.name.endswith(".txt"):
+                st.text_area("Data Preview:", value=data_file.getvalue().decode("utf-8"), height=150, disabled=True)
+            else:
+                try:
+                    df2 = load_excel_dataframe_safe(data_file.name, data_file.getvalue())
+                    df2 = make_arrow_compatible(df2)
+                    st.dataframe(df2.head(10), width="stretch")
+                except Exception as e:
+                    st.error(f"Error reading data: {e}")
 
     generate_btn = st.button("🚀 Generate Script", type="primary", key="gen_btn")
 
     if generate_btn:
         if not steps_file:
-            st.warning("⚠️ Please upload the Manual steps Excel first.")
+            st.warning("⚠️ Please upload the Manual steps file first.")
         else:
             st.session_state.streaming = True
             st.session_state.final_done = False
@@ -96,14 +90,14 @@ with tab1:
         ph_done = st.empty()
 
         ph_started.write("⭕ **Started**")
-        ph_reading.write("⭕ **Reading Excel**")
+        ph_reading.write("⭕ **Reading Files**")
         ph_generating.write("⭕ **Generating Script**")
         ph_saving.write("⭕ **Saving Script**")
         ph_done.write("⭕ **Done**")
 
         def render_goals():
             ph_started.write("✅ **Started**" if goals["started"]["done"] else "⭕ **Started**")
-            ph_reading.write("✅ **Reading Excel**" if goals["reading_excel"]["done"] else "⭕ **Reading Excel**")
+            ph_reading.write("✅ **Reading Files**" if goals["reading_excel"]["done"] else "⭕ **Reading Files**")
             ph_generating.write("✅ **Generating Script**" if goals["generating_script"]["done"] else "⭕ **Generating Script**")
             ph_saving.write("✅ **Saving Script**" if goals["saving_script"]["done"] else "⭕ **Saving Script**")
             ph_done.write("✅ **Done**" if goals["done"]["done"] else "⭕ **Done**")
@@ -114,28 +108,25 @@ with tab1:
 
         if st.session_state.streaming:
             try:
-                name = steps_file.name.lower()
-                ext = name.split(".")[-1]
-                mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" if ext == "xlsx" else "application/vnd.ms-excel"
+                data_payload = {}
+                files_payload = {}
 
-                steps_bytes = steps_file.getvalue()
-                if isinstance(steps_bytes, str):
-                    steps_bytes = steps_bytes.encode("utf-8")
+                # Steps File
+                s_name = steps_file.name.lower()
+                s_ext = s_name.split(".")[-1]
+                s_mime = "text/plain" if s_ext == "txt" else "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                files_payload["steps_file"] = (steps_file.name, steps_file.getvalue(), s_mime)
 
-                files = {
-                    "file": (steps_file.name, steps_bytes, mime)
-                }
-
+                # Data File
                 if data_file:
-                    data_bytes = data_file.getvalue()
-                    if isinstance(data_bytes, str):
-                        data_bytes = data_bytes.encode("utf-8")
-
-                    files["data_file"] = (data_file.name, data_bytes, mime)
+                    d_name = data_file.name.lower()
+                    d_ext = d_name.split(".")[-1]
+                    d_mime = "text/plain" if d_ext == "txt" else "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    files_payload["data_file"] = (data_file.name, data_file.getvalue(), d_mime)
 
                 streamed_text = ""
 
-                for item in stream_chat(files):
+                for item in stream_chat(data_payload, files_payload):
                     if hasattr(item, "status_code"):
                         if item.status_code != 200:
                             st.error(f"Backend error: {item.text}")

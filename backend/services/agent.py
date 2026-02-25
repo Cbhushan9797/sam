@@ -17,7 +17,7 @@ from backend.system_prompt import system_prompt as sys_p
 llm = Ollama(
     model=config.OLLAMA_MODEL,
     base_url=config.OLLAMA_BASE_URL,
-    request_timeout=300.0,  # Increased timeout for complex sites
+    request_timeout=3600.0,  # Greatly increased timeout for slow local models
 )
 
 # ----------- Progress bus -----------
@@ -89,7 +89,7 @@ async def orchestrator(user_query: str) -> AsyncGenerator[str, None]:
     update_progress("started", "begin")
     
     # Start MCP Browser
-    mcp_config = {"mcpServers": {"playwright": {"command": "npx", "args": ["@playwright/mcp@latest"]}}}
+    mcp_config = {"mcpServers": {"playwright": {"command": "npx", "args": ["-y", "@playwright/mcp@latest"]}}}
     client = Client(mcp_config)
 
     try:

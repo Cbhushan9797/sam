@@ -2,7 +2,7 @@ import json
 from typing import Optional
 from pathlib import Path
 
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from fastapi.responses import StreamingResponse, FileResponse
 
 from backend.services import excel_loader, agent, files, execution
@@ -20,44 +20,50 @@ def to_bytes(data):
 
 @app.post("/api/chat")
 async def chat(
-    file: UploadFile = File(...),
+    steps_file: UploadFile = File(...),
     data_file: Optional[UploadFile] = File(None),
 ):
-    if file is None:
-        raise HTTPException(status_code=400, detail="XLS/XLSX file is required.")
-
-    fname = (file.filename or "").lower()
-    if not (fname.endswith(".xlsx") or fname.endswith(".xls") or fname.endswith(".xlsb")):
-        raise HTTPException(status_code=400, detail="Unsupported file type.")
+    if steps_file is None:
+        raise HTTPException(status_code=400, detail="Steps file is required.")
 
     async def stream_generator():
         try:
-            yield to_bytes({"type": "status", "label": "started", "state": "begin", "percent": 5}) + b"\n"
+            yield to_bytes({"type": "status", "label": "started", "state": "complete", "percent": 5}) + b"\n"
+            
+            # Read Steps File
             yield to_bytes({"type": "status", "label": "reading_excel", "state": "begin", "percent": 8}) + b"\n"
-
-            # Read Steps
             try:
-                steps_content = await file.read()
-                steps_csv = excel_loader.read_excel_bytes_to_csv(steps_content, file.filename)
+                steps_content = await steps_file.read()
+                fname = steps_file.filename.lower()
+                if fname.endswith(".txt"):
+                    steps_text = steps_content.decode("utf-8")
+                else:
+                    steps_text = excel_loader.read_excel_bytes_to_csv(steps_content, steps_file.filename)
+                
                 yield to_bytes({"type": "status", "label": "reading_excel", "state": "complete", "percent": 10}) + b"\n"
             except Exception as e:
                 yield to_bytes({"type": "status", "label": "reading_excel", "state": "fail"}) + b"\n"
-                yield to_bytes({"type": "error", "message": f"Excel Error: {str(e)}"}) + b"\n"
+                yield to_bytes({"type": "error", "message": f"Steps File Error: {str(e)}"}) + b"\n"
                 return
 
-            # Read Data (Optional)
-            data_csv = None
+            # Read Data File (Optional)
+            data_text = "None"
             if data_file and (data_file.filename or "").strip():
                 yield to_bytes({"type": "status", "label": "reading_data_excel", "state": "begin"}) + b"\n"
                 try:
                     data_content = await data_file.read()
-                    data_csv = excel_loader.read_excel_bytes_to_csv(data_content, data_file.filename)
+                    dfname = data_file.filename.lower()
+                    if dfname.endswith(".txt"):
+                        data_text = data_content.decode("utf-8")
+                    else:
+                        data_text = excel_loader.read_excel_bytes_to_csv(data_content, data_file.filename)
+                    
                     yield to_bytes({"type": "status", "label": "reading_data_excel", "state": "complete"}) + b"\n"
                 except Exception as e:
-                    yield to_bytes({"type": "error", "message": f"Data Excel Error: {str(e)}"}) + b"\n"
+                    yield to_bytes({"type": "error", "message": f"Data File Error: {str(e)}"}) + b"\n"
                     return
 
-            prompt = f"Steps (CSV):\n{steps_csv}\n\nTest Data (CSV):\n{data_csv if data_csv else 'None'}"
+            prompt = f"Steps:\n{steps_text}\n\nTest Data:\n{data_text}"
 
             async for line in agent.orchestrator(prompt):
                 # line is already an NDJSON string from agent.py

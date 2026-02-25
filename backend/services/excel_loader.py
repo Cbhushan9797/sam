@@ -57,5 +57,7 @@ def read_excel_bytes_to_csv(content, filename: str) -> str:
         except Exception as fallback_e:
             logger.error(f"Excel fallback failed: {fallback_e}")
             raise
+    finally:
+        bio.close()
 
     return df.to_csv(index=False)

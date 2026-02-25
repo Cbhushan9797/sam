@@ -1,0 +1,4 @@
+username: teamcenter user name
+password: teamcenter password
+partname: Motor
+description: a type of vehicle
