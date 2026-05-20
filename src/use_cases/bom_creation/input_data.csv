@@ -1,0 +1,3 @@
+bomId,parentItemId,childItemId,quantity,unitOfMeasure
+BOM_001,PARENT_PART_001,CHILD_PART_001,2,EA
+BOM_002,PARENT_PART_002,CHILD_PART_005,4,EA

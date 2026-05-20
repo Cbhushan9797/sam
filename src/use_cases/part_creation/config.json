@@ -1,0 +1,17 @@
+{
+  "id": "part_creation",
+  "displayName": "Part Creation",
+  "description": "Create Teamcenter parts from CSV data and verify search visibility.",
+  "stableTestPath": "tests/test_part_creation.py",
+  "inputMode": "csv",
+  "recordPluralLabel": "Parts",
+  "resultColumnLabels": {
+    "partId": "Part ID",
+    "partName": "Part Name",
+    "partType": "Part Type",
+    "status": "Status",
+    "timeTakenSeconds": "Time Taken Seconds",
+    "screenshotPath": "Screenshot Path",
+    "errorMessage": "Error Message"
+  }
+}

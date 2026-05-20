@@ -1,0 +1,4 @@
+partId,partName,partType,description,revision,unitOfMeasure
+AUTO_PART_001,Automation Test Part 1,Design Part,Created by automation,A,EA
+AUTO_PART_002,Automation Test Part 2,Manufacturing Part,Created by automation,A,EA
+AUTO_PART_003,Automation Test Part 3,Design Part,Created by automation,B,KG

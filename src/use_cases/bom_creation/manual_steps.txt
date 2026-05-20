@@ -1,0 +1,27 @@
+Test Case: Create a Bill of Materials in Teamcenter
+
+Preconditions:
+User has valid Teamcenter access.
+User has permission to create or modify BOM structures.
+Parent and child items already exist.
+
+Test Data:
+BOM data will be provided from CSV.
+
+Manual Steps:
+1. Open Teamcenter application.
+2. Login with valid username and password.
+3. Wait until Teamcenter home page is visible.
+4. Navigate to the BOM Creation or Structure Management screen.
+5. Search for the parent item from CSV.
+6. Open the parent item structure.
+7. Add a new child component from CSV.
+8. Enter quantity from CSV if available.
+9. Enter unit of measure from CSV if available.
+10. Save the BOM structure.
+11. Verify success message is displayed.
+12. Reopen or refresh the parent structure.
+13. Verify the child component appears in the BOM.
+
+Expected Result:
+Each BOM row from CSV should be created successfully and should be visible in the saved Teamcenter structure.

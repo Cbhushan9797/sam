@@ -1,0 +1,17 @@
+{
+  "id": "bom_creation",
+  "displayName": "BOM Creation",
+  "description": "Create and validate Teamcenter BOM records from structured input data.",
+  "stableTestPath": "tests/test_bom_creation.py",
+  "inputMode": "csv",
+  "recordPluralLabel": "BOM Records",
+  "resultColumnLabels": {
+    "bomId": "BOM ID",
+    "parentItemId": "Parent Item ID",
+    "childItemId": "Child Item ID",
+    "status": "Status",
+    "timeTakenSeconds": "Time Taken Seconds",
+    "screenshotPath": "Screenshot Path",
+    "errorMessage": "Error Message"
+  }
+}

@@ -1,0 +1,29 @@
+Test Case: Create a new Part in Teamcenter
+
+Preconditions:
+User has valid Teamcenter access.
+User has permission to create a Part.
+
+Test Data:
+Part data will be provided from CSV.
+
+Manual Steps:
+1. Open Teamcenter application.
+2. Login with valid username and password.
+3. Wait until Teamcenter home page is visible.
+4. Navigate to Part Creation screen.
+5. Click Create New Part.
+6. Enter Part ID from CSV.
+7. Enter Part Name from CSV.
+8. Select Part Type from CSV.
+9. Enter Description from CSV if available.
+10. Enter Revision from CSV if available.
+11. Enter Unit of Measure from CSV if available.
+12. Fill all other mandatory fields.
+13. Click Save.
+14. Verify success message is displayed.
+15. Search the created Part ID.
+16. Verify the created Part appears in search results.
+
+Expected Result:
+Each part from CSV should be created successfully and should be searchable in Teamcenter.

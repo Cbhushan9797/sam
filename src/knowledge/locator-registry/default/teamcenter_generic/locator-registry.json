@@ -1,0 +1,190 @@
+{
+  "profileId": "default/teamcenter_generic",
+  "teamcenterVersion": "generic",
+  "deploymentName": "default",
+  "lastUpdated": "2026-05-19",
+  "pages": {
+    "login_page": {
+      "username_input": {
+        "strategy": "label_regex",
+        "value": "user id|username",
+        "flags": ["IGNORECASE"],
+        "status": "candidate",
+        "confidence": "medium",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Default fallback until a real environment validates an exact login label."
+      },
+      "password_input": {
+        "strategy": "label_regex",
+        "value": "password",
+        "flags": ["IGNORECASE"],
+        "status": "candidate",
+        "confidence": "medium",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Default fallback until a real environment validates an exact password label."
+      },
+      "sign_in_button": {
+        "strategy": "role_regex",
+        "value": "sign in|login",
+        "flags": ["IGNORECASE"],
+        "options": {
+          "role": "button"
+        },
+        "status": "candidate",
+        "confidence": "medium",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "May need profile-specific override for SSO or customized Teamcenter shells."
+      }
+    },
+    "home_page": {
+      "part_creation_navigation": {
+        "strategy": "text",
+        "value": "Part Creation",
+        "options": {
+          "exact": true
+        },
+        "status": "candidate",
+        "confidence": "low",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Often customized per deployment. Confirm with MCP snapshot."
+      },
+      "global_search_input": {
+        "strategy": "searchbox",
+        "value": "search",
+        "flags": ["IGNORECASE"],
+        "status": "candidate",
+        "confidence": "medium",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Fallback search locator for generic Teamcenter shells."
+      }
+    },
+    "part_creation_page": {
+      "create_new_part_button": {
+        "strategy": "role_regex",
+        "value": "new part|create new part",
+        "flags": ["IGNORECASE"],
+        "options": {
+          "role": "button"
+        },
+        "status": "candidate",
+        "confidence": "medium",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Use exact text once validated in the target deployment."
+      },
+      "part_id_input": {
+        "strategy": "label_regex",
+        "value": "part id",
+        "flags": ["IGNORECASE"],
+        "status": "candidate",
+        "confidence": "medium",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Promote to approved after MCP validation."
+      },
+      "part_name_input": {
+        "strategy": "label_regex",
+        "value": "part name",
+        "flags": ["IGNORECASE"],
+        "status": "candidate",
+        "confidence": "medium",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Promote to approved after MCP validation."
+      },
+      "part_type_field": {
+        "strategy": "label_regex",
+        "value": "part type",
+        "flags": ["IGNORECASE"],
+        "status": "candidate",
+        "confidence": "medium",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Field type varies by deployment."
+      },
+      "description_input": {
+        "strategy": "label_regex",
+        "value": "description",
+        "flags": ["IGNORECASE"],
+        "status": "candidate",
+        "confidence": "low",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Optional field."
+      },
+      "revision_input": {
+        "strategy": "label_regex",
+        "value": "revision",
+        "flags": ["IGNORECASE"],
+        "status": "candidate",
+        "confidence": "low",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Optional field."
+      },
+      "unit_of_measure_input": {
+        "strategy": "label_regex",
+        "value": "unit of measure|uom",
+        "flags": ["IGNORECASE"],
+        "status": "candidate",
+        "confidence": "low",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Optional field."
+      },
+      "save_button": {
+        "strategy": "role_regex",
+        "value": "^save$",
+        "flags": ["IGNORECASE"],
+        "options": {
+          "role": "button"
+        },
+        "status": "candidate",
+        "confidence": "medium",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Promote to approved after Teamcenter shell validation."
+      },
+      "success_message": {
+        "strategy": "text_regex",
+        "value": "part created successfully|success",
+        "flags": ["IGNORECASE"],
+        "status": "candidate",
+        "confidence": "low",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Success text is highly deployment-specific."
+      }
+    },
+    "search_page": {
+      "search_input": {
+        "strategy": "searchbox",
+        "value": "search",
+        "flags": ["IGNORECASE"],
+        "status": "candidate",
+        "confidence": "medium",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "Global shell search fallback."
+      },
+      "search_button": {
+        "strategy": "role_regex",
+        "value": "search",
+        "flags": ["IGNORECASE"],
+        "options": {
+          "role": "button"
+        },
+        "status": "candidate",
+        "confidence": "low",
+        "source": "bootstrap",
+        "lastValidated": "",
+        "notes": "May be absent if search triggers on Enter."
+      }
+    }
+  }
+}
